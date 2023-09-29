@@ -13,11 +13,11 @@ class DeviceManager:
         if device_class:
             device_id = len(smartDevice[1]) + 1
             if device_type == 'thermostat':
-                temperature = device_info.get('temperature', 70)  # Default temperature is 70 if not specified
-                device = device_class(device_id, temperature)
+                temperature = device_info.get('temperature', 70)  
+                device = device_class(device_id, device_info['device_manager'],temperature)
             else:
                 status = device_info.get('status', 'off')  # Default status is 'off' if not specified
                 device = device_class(device_id, device_type,status)
-            self.devices[device_id] = device
+            self.devices[device_type][1][device_id] = device
             print(f"{device_type.capitalize()} {device_id} has been created!")
             return device

@@ -1,4 +1,4 @@
-import schedule
+import schedule,time
 from datetime import datetime
 
 class ScheduleManager:
@@ -45,3 +45,8 @@ class ScheduleManager:
     def remove_schedule(self, schedule_id):
         if schedule_id in self.schedules:
             del self.schedules[schedule_id]
+
+    def run_scheduled_tasks(self):
+        while True:
+            schedule.run_pending()
+            time.sleep(1)

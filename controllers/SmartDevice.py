@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-
+from .Triggers import TriggerManager
 class SmartDevice(ABC):
     def __init__(self, device_id, device_type='',status='off'):
         self.device_id = device_id
@@ -33,10 +33,19 @@ class Door(SmartDevice):
         # Define the specific action for the Door class
         pass
 
+
 class Thermostat(SmartDevice):
-    def __init__(self, device_id, temperature=70):
+    def __init__(self, device_id,device_manager,temperature="70"):
         super().__init__(device_id, device_type='thermostat')
         self.temperature = temperature
+        self.device_manager=device_manager
+        self.trigger_manager = TriggerManager(device_manager)
+       
 
     def action(self):
-        pass
+        data = {"temperature": self.temperature}
+        self.trigger_manager.trigger_action_on_device(data)
+
+    def add_trigger(self,triggerInfo):
+        self.trigger_manager.add_trigger(triggerInfo)
+        self.action()
