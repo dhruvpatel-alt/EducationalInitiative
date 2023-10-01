@@ -5,7 +5,6 @@ import schedule
 
 class DeviceManager:
     def __init__(self):
-        self._devices = {'light': [Light, {}], 'door': [Door, {}], 'thermostat': [Thermostat, {}]}
         self._schedules = {}
         self._actions = {
             'turn_on': self._turn_on,
