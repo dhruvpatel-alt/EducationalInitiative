@@ -1,41 +1,43 @@
-class TriggerManager:
-    def __init__(self, device_manager):
-        self.triggers = {}
-        self.device_manager = device_manager
+class Trigger:
+    def __init__(self, device_manager, temperature):
+        self._device_manager = device_manager
+        self._triggers = []
+        self._temperature = float(temperature)
 
-    def add_trigger(self, triggerInfo):
-        condition=triggerInfo['condition']
-        device_type=triggerInfo['device_type']
-        device_id=triggerInfo['device_id']
-        action=triggerInfo['action']
-        devices=self.device_manager.devices
-        if device_type in devices:
-            if device_id in devices[device_type][1]:
-                self.triggers[condition] = (device_type, device_id, action)
-                print(f"Triggers for {device_type} with id {device_id} has been added")
-            else:
-                print(f"There is no {device_type} devices with device_id {device_id} .")
+    def add_trigger(self, trigger_info):
+        condition = trigger_info['condition']
+        action = trigger_info['action'][0]
+        device_type = trigger_info['action'][1]
+        device_id = trigger_info['action'][2]
+
+        # Check if the specified device exists in the manager
+        device_to_trigger = self._device_manager._get_device(device_type, device_id)
+        if device_to_trigger:
+            self._triggers.append((condition, action, device_type, device_id))
+            print(f"Trigger added for {device_type} {device_id}")
+            data = {"temperature": self._temperature}
+            if eval(condition, data):
+                self.trigger_action(action, device_type, device_id)
         else:
-            print(f"We are not supporting {device_type} devices right now.")
+            print(f"No {device_type} found with ID {device_id}.")
 
-    def check_condition(self, condition, data):
-        parts = condition.split()
-        if len(parts) == 3:
-            left_operand, operator, right_operand = parts
-            target=int(data[left_operand])
-            if operator == ">" and left_operand in data:
-                return target > float(right_operand)
-            elif operator == "<" and left_operand in data:
-                return target < float(right_operand)
-        return False
+    def check_condition(self, data):
+        for condition, action, device_type, device_id in self._triggers:
+            if eval(condition, data):
+                self.trigger_action(action, device_type, device_id)
 
-    def trigger_action_on_device(self, data):
-        for condition, action in self.triggers.items():
-            device_type, device_id, action_type = action
-            device = self.device_manager.devices[device_type][1][device_id]
-            if self.check_condition(condition, data):
-                print(f"Condition {condition} Trigger for {device_type} {device_id}")
-                if action_type == "turn_on":
-                    device.turn_on()
-                elif action_type == "turn_off":
-                    device.turn_off()
+    def trigger_action(self, action, device_type, device_id):
+        target_device = self._device_manager._get_device(device_type, device_id)
+        if target_device:
+            if action == 'turn_on':
+                target_device.turn_on()
+            elif action == 'turn_off':
+                target_device.turn_off()
+            elif action == "close_door":
+                target_device.close_door()
+            elif action == "open_door":
+                target_device.open_door()
+
+    def update_temperature(self, data, new_temperature):
+        self._temperature = new_temperature
+        self.check_condition(data)

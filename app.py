@@ -1,6 +1,4 @@
 from controllers.Devices import DeviceManager
-from controllers.Schedules import ScheduleManager
-from controllers.Triggers import  TriggerManager
 
 # Create an instance of the Device Manager
 device_manager = DeviceManager()
@@ -13,19 +11,24 @@ light = device_manager.create_device(light_info)
 door_info = {'type': 'door', 'status': 'locked'}
 door = device_manager.create_device(door_info)
 
-# Add a thermostat to the system
-thermostat_info = {'type': 'thermostat', 'temperature': '60','device_manager':device_manager}
-thermostat= device_manager.create_device(thermostat_info)
+# Add a thermostat to the system (only one thermostat)
+thermostat_info = {'type': 'thermostat', 'temperature': 90}
+thermostat = device_manager.create_device(thermostat_info)
 
-trigger_info={'condition':'temperature < 70','device_type':'light','device_id':1 ,'action':'turn_on'}
+# Create Schedule for light with id 1
+schedule_info={'device':['light',1],'time':'15:50','action':'turn_on'}
+schedule_info2={'device':['door',1],'time':'15:51','action':'close_door'}
+device_manager.create_schedule(schedule_info)
+device_manager.create_schedule(schedule_info2)
+
+# Define temperature triggers
+trigger_info = {'condition': 'temperature >= 80', 'action': ('turn_on', 'light', 1)}
+trigger_info1 = {'condition': 'temperature >= 60', 'action': ('close_door', 'door', 1)}
 thermostat.add_trigger(trigger_info)
-schedule_manager = ScheduleManager()
+thermostat.add_trigger(trigger_info1)
 
-light_turn_on_schedule = {
-    'device': light,
-    'time': '15:00',
-    'action': light.turn_on
-}
+# Update the thermostat's temperature
+thermostat.update_temperature(50)
 
-schedule_manager.create_schedule(light_turn_on_schedule)
-schedule_manager.run_scheduled_tasks()
+# Run scheduled tasks
+device_manager.run_scheduled_tasks()
