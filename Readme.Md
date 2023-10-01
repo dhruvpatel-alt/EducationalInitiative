@@ -48,5 +48,3 @@ pip install schedule
         ```python
         python main.py
         
-* Follow the On-screen Prompts:
-    The application will guide you through creating and managing smart devices, schedules, and triggers.
