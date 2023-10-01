@@ -31,7 +31,7 @@ This is a Python-based Smart Home Automation System. It allows you to create and
 git clone https://github.com/yourusername/smart-home-automation.git
 cd smart-home-automation
 pip install schedule
-
+```
 ## Project Structure
 
 * main.py: The main entry point of the application.
