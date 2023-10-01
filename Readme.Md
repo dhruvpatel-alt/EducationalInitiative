@@ -3,6 +3,10 @@
 ### Overview
 
 This is a Python-based Smart Home Automation System. It allows you to create and manage smart devices, schedules, and triggers for various home automation tasks.
+## Data Flow
+
+![Data Flow](DataFlow.png)
+
 
 ### Table of Contents
 
