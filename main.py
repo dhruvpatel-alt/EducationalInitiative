@@ -1,23 +1,22 @@
-from controllers.Devices import DeviceManager
+from device_manager import DeviceManager
 
-# Create an instance of the Device Manager
 device_manager = DeviceManager()
 
-# Add a light to the system
+# Create a light device
 light_info = {'type': 'light', 'status': 'off'}
 light = device_manager.create_device(light_info)
 
-# Add a door to the system
+# Create a door device
 door_info = {'type': 'door', 'status': 'locked'}
 door = device_manager.create_device(door_info)
 
-# Add a thermostat to the system (only one thermostat)
+# Create a thermostat device
 thermostat_info = {'type': 'thermostat', 'temperature': 90}
 thermostat = device_manager.create_device(thermostat_info)
 
-# Create Schedule for light with id 1
-schedule_info={'device':['light',1],'time':'15:50','action':'turn_on'}
-schedule_info2={'device':['door',1],'time':'15:51','action':'close_door'}
+# Create a schedule for the light
+schedule_info = {'device': ['light', 1], 'time': '00:26', 'action': 'turn_on'}
+schedule_info2 = {'device': ['door', 1], 'time': '00:27', 'action': 'close_door'}
 device_manager.create_schedule(schedule_info)
 device_manager.create_schedule(schedule_info2)
 

@@ -1,6 +1,7 @@
 import schedule
 from datetime import datetime
 import calendar  
+from  customize_exception import MyException
 
 class Schedules:
     def __init__(self, device_manager, schedule_info):
@@ -14,21 +15,21 @@ class Schedules:
             schedule_time = self._schedule_info['time']
             action = self._schedule_info['action']
 
-            if action not in self._device_manager._get_actions():
-                print("Action is not supported yet. Try with another valid action!")
-                return False
+            if not any((item['device'][1] == device[1] and item['device'][0] == device[0]) for item in self._device_manager._schedules.values()):
 
             # Create the schedule
-            self._schedule_id = len(self._device_manager._get_schedules()) + 1
-            self._device_manager._get_schedules()[self._schedule_id] = {
+                self._schedule_id = len(self._device_manager._get_schedules()) + 1
+                self._device_manager._get_schedules()[self._schedule_id] = {
                 'time': schedule_time,
                 'action': action,
                 'device': device,
                 'schedule_id': self._schedule_id
             }
 
-            self.execute_schedule(self._schedule_id)
-
+                self.execute_schedule(self._schedule_id)
+            else:
+                raise MyException(f"No {device[0]} found with ID {device[1]}.")
+                
     def execute_schedule(self, schedule_id):
         schedule_info = self._schedule_info
         target_time = datetime.strptime(schedule_info['time'], "%H:%M")
@@ -47,18 +48,16 @@ class Schedules:
 
         time_until_target = target_time - current_time
         seconds_to_wait = time_until_target.total_seconds()
-        print(seconds_to_wait)
         device = schedule_info['device']
-        print(f"Schedule {schedule_id} has been created for {device[0]} {device[1]}. It will run at {schedule_info['time']} {day}.")
+        print(f"Info : Schedule {schedule_id} has been created for {device[0]} {device[1]}. It will run at {schedule_info['time']} {day}.")
         def action_wrapper():
             if self._schedule_id in self._device_manager._get_schedules():
                 device = schedule_info['device']
-                print(device)
                 type = device[0]
                 id = device[1]
                 action = schedule_info['action']
                 self._device_manager._perform_action(action, type, id)
-                print(f"Action completed for {type} {id}.")
+                print(f"Action : {action} completed for {type} {id}.")
                 self.remove_schedule(self._schedule_id)
 
         schedule.every(seconds_to_wait).seconds.do(action_wrapper)
@@ -66,3 +65,5 @@ class Schedules:
     def remove_schedule(self, schedule_id):
         if schedule_id in self._device_manager._get_schedules():
             del self._device_manager._get_schedules()[schedule_id]
+        else:
+            raise MyException(f"Schedule with ID {schedule_id} not found.")
