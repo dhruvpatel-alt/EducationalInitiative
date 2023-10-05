@@ -32,8 +32,8 @@ This is a Python project for managing smart devices and schedules using the Obse
 1. **Clone the Repository:**
 
 ```shell
-git clone https://github.com/yourusername/smart-home-automation.git
-cd smart-home-automation
+git clone https://github.com/dhruvpatel-alt/EducationalInitiative
+cd smart-home-system
 pip install schedule
 ```
 ## Project Structure
