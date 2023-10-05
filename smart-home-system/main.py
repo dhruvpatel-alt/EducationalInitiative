@@ -1,7 +1,8 @@
 from device_manager import DeviceManager
-
+from observer import CustomObserver
 device_manager = DeviceManager()
-
+custom_observer = CustomObserver()
+device_manager.attach(custom_observer)
 # Create a light device
 light_info = {'type': 'light', 'status': 'off'}
 light = device_manager.create_device(light_info)
@@ -15,8 +16,8 @@ thermostat_info = {'type': 'thermostat', 'temperature': 90}
 thermostat = device_manager.create_device(thermostat_info)
 
 # Create a schedule for the light
-schedule_info = {'device': ['light', 1], 'time': '00:26', 'action': 'turn_on'}
-schedule_info2 = {'device': ['door', 1], 'time': '00:27', 'action': 'close_door'}
+schedule_info = {'device': ['light', 1], 'time': '23:10', 'action': 'turn_on'}
+schedule_info2 = {'device': ['door', 1], 'time': '23:11', 'action': 'close_door'}
 device_manager.create_schedule(schedule_info)
 device_manager.create_schedule(schedule_info2)
 
@@ -31,3 +32,4 @@ thermostat.update_temperature(50)
 
 # Run scheduled tasks
 device_manager.run_scheduled_tasks()
+device_manager.get_status()

@@ -1,20 +1,22 @@
 from scheduler import Schedules
 import time
-from smart_devices import Light, Door, Thermostat
+from smart_devices import LightFactory, DoorFactory, ThermostatFactory
 import schedule
 from customize_exception import MyException
 from datetime import datetime
+from abc import ABC, abstractmethod
 
 class DeviceManager:
     def __init__(self):
-        self._devices = {'light': [Light, {}], 'door': [Door, {}], 'thermostat': [Thermostat, {}]}
+        self._devices = {'light': [LightFactory, {}], 'door': [DoorFactory, {}], 'thermostat': [ThermostatFactory, {}]}
         self._schedules = {}
         self._actions = {
-            'turn_on': self._turn_on,
-            'turn_off': self._turn_off,
-            'close_door': self._close_door,
-            'open_door': self._open_door
+            'turn_on': Proxy._turn_on,
+            'turn_off': Proxy._turn_off,
+            'close_door': Proxy._close_door,
+            'open_door': Proxy._open_door
         }
+        self._observers = []
 
 
     def create_device(self, device_info):
@@ -44,11 +46,19 @@ class DeviceManager:
             device = device_class(device_id, self, temperature)
         else:
             device = device_class(device_id, device_type, status)
-
+        for observer in self._observers:
+            device.attach(observer)
         self._devices[device_type][1][device_id] = device
         print(f"Info : {device_type.capitalize()} {device_id} has been created!")
         return device
         
+    def attach(self, observer):
+        self._observers.append(observer)
+
+    def notify_observers(self, data):
+        for observer in self._observers:
+            observer.update(self, data)
+
     def _get_actions(self):
         return self._actions
 
@@ -80,6 +90,30 @@ class DeviceManager:
             schedule.run_pending()
             time.sleep(1)
 
+  
+
+    def _perform_action(self,action,device_type,device_id):
+        self._actions[action](self,device_type,device_id)
+
+    def _is_valid_time(self, time_str):
+        try:
+            datetime.strptime(time_str, "%H:%M")
+            return True
+        except ValueError:
+            return False
+        
+    def _print_device_status(self):
+        print("--------------------------  Device Status --------------------------")
+        for device_name, device_info in self._devices.items():
+            for device_id, device_status in device_info[1].items():
+                formatted_status = device_status.get_status()
+                print(f"{device_name.capitalize()} with ID {device_id} has a status of {formatted_status}")
+
+    def get_status(self):
+        self._print_device_status()
+
+
+class Proxy(ABC):
     def _turn_on(self, device_type, device_id):
         device = self._get_device(device_type, device_id)
         device.turn_on()
@@ -95,13 +129,3 @@ class DeviceManager:
     def _close_door(self, device_type, device_id):
         device = self._get_device(device_type, device_id)
         device.close_door()
-
-    def _perform_action(self,action,device_type,device_id):
-        self._actions[action](device_type,device_id)
-
-    def _is_valid_time(self, time_str):
-        try:
-            datetime.strptime(time_str, "%H:%M")
-            return True
-        except ValueError:
-            return False

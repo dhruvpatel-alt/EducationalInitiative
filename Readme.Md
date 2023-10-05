@@ -1,27 +1,29 @@
-## Smart Home Automation System
+# Smart Device Management System
 
-### Overview
+This is a Python project for managing smart devices and schedules using the Observer and Proxy design patterns.
 
-This is a Python-based Smart Home Automation System. It allows you to create and manage smart devices, schedules, and triggers for various home automation tasks.
-## Data Flow
-
-![Data Flow](DataFlow.png)
-
-
-### Table of Contents
+## Table of Contents
 
 - [Features](#features)
-- [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
-- [Project Structure](#project-structure)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
 - [Usage](#usage)
+- [UML Diagram](#uml-diagram)
+- [Contributing](#contributing)
+- [License](#license)
 
-### Features
+## Features
 
-* **Device Management:** Create and manage smart devices such as lights, doors, and thermostats.
-* **Scheduling:** Schedule tasks for your smart devices.
-* **Triggers:** Define triggers based on conditions and actions.
-* **Simulation:** Simulate a smart home automation system.
+- Create and manage smart devices (lights, doors, thermostats).
+- Schedule tasks for devices to perform actions at specific times.
+- Define triggers based on conditions (e.g., temperature) to perform actions.
+- Implement an Observer pattern for observing and updating device status.
+- Use a Proxy pattern for handling device actions.
+
+## Data Flow
+
+![Data Flow](./Images/DataFlow.png)
 
 ### Prerequisites
 
@@ -38,12 +40,19 @@ pip install schedule
 ```
 ## Project Structure
 
-* main.py: The main entry point of the application.
-* device_manager.py: Manages smart devices, schedules, and actions.
-* smart_devices.py: Defines the classes for various smart devices.
-* triggers.py: Implements trigger-related functionality.
-* schedules.py: Handles scheduled tasks.
-* customize_exception.py: Custom exception classes for error handling.
+- `main.py`: This is the main entry point of your project, where you can run and interact with the smart device management system.
+
+- `device_managers.py`: Contains the `DeviceManager` class, which handles the creation and management of smart devices, schedules, and actions.
+
+- `scheduler.py`: Contains the `Schedules` class, responsible for scheduling tasks to be executed at specific times.
+
+- `trigger.py`: Contains the `Trigger` class, which manages triggers based on specified conditions.
+
+- `smart_devices.py`: Includes classes like `SmartDevice`, `LightFactory`, `DoorFactory`, and `ThermostatFactory` representing different types of smart devices.
+
+- `observer.py`: Contains the `Observer` class and any custom observer classes like `CustomObserver` for observing and updating device status.
+
+- `customize_exceptions.py`: Houses any custom exception classes used in the project, such as `MyException`.
 
 ## Usage
 
@@ -52,3 +61,6 @@ pip install schedule
         ```python
         python main.py
         
+## Output 
+
+![Output](./Images/Output.png)
