@@ -1,41 +1,64 @@
-# Smart Home System
+# Smart Device Management System
 
-The Smart Home System is a simulation that allows users to control different smart devices such as lights, thermostats, and door locks via a central hub. Users can set schedules, automate tasks, and view the status of each device.
+This is a Python project for managing smart devices and schedules using the Observer and Proxy design patterns.
+
+## Table of Contents
+
+- [Features](#features)
+- [Getting Started](#getting-started)
+- [Prerequisites](#prerequisites)
+- [Usage](#usage)
+- [UML Diagram](#data-flow)
+- [Output](#output)
 
 ## Features
 
-- Initialize the Smart Home System with different devices, each having a unique ID and type (light, thermostat, door lock).
-- Turn devices on/off.
-- Schedule devices to turn on/off at a specific time.
-- Automate tasks based on triggers (e.g., turning off lights when the thermostat reaches a certain temperature).
+- Create and manage smart devices (lights, doors, thermostats).
+- Schedule tasks for devices to perform actions at specific times.
+- Define triggers based on conditions (e.g., temperature) to perform actions.
+- Implement an Observer pattern for observing and updating device status.
+- Use a Proxy pattern for handling device actions.
 
-### New Functionalities
+## Data Flow
 
-#### Trigger System
+![Data Flow](./Images/DataFlow.png)
 
-The Smart Home System now includes a Trigger System that allows users to define conditions and actions for automating tasks. Here's how it works:
+### Prerequisites
 
-- Users can add triggers based on conditions and specify actions.
-- Conditions can include temperature thresholds for thermostats and other custom conditions.
-- Actions can include turning devices on or off.
-
-#### Thermostat Trigger
-
-The Thermostat device now has the ability to trigger actions on other devices based on temperature conditions. For example, when the thermostat temperature exceeds a certain threshold, you can automate actions like turning off lights.
+* Python 3.x installed on your system.
 
 ### Getting Started
 
-Follow these instructions to set up and run the Smart Home System simulation on your local machine.
+1. **Clone the Repository:**
 
-#### Prerequisites
-
-- Python 3.x
-- [schedule](https://pypi.org/project/schedule/) library
-
-#### Installation
-
-1. Clone this repository to your local machine.
-2. Install the required dependencies using `pip`:
-
-```bash
+```shell
+git clone https://github.com/yourusername/smart-home-automation.git
+cd smart-home-automation
 pip install schedule
+```
+## Project Structure
+
+- `main.py`: This is the main entry point of your project, where you can run and interact with the smart device management system.
+
+- `device_managers.py`: Contains the `DeviceManager` class, which handles the creation and management of smart devices, schedules, and actions.
+
+- `scheduler.py`: Contains the `Schedules` class, responsible for scheduling tasks to be executed at specific times.
+
+- `trigger.py`: Contains the `Trigger` class, which manages triggers based on specified conditions.
+
+- `smart_devices.py`: Includes classes like `SmartDevice`, `LightFactory`, `DoorFactory`, and `ThermostatFactory` representing different types of smart devices.
+
+- `observer.py`: Contains the `Observer` class and any custom observer classes like `CustomObserver` for observing and updating device status.
+
+- `customize_exceptions.py`: Houses any custom exception classes used in the project, such as `MyException`.
+
+## Usage
+
+* Run the Application:
+    * Shell
+        ```python
+        python main.py
+        
+## Output 
+
+![Output](./Images/Output.png)
