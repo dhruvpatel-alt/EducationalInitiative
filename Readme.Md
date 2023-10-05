@@ -9,9 +9,8 @@ This is a Python project for managing smart devices and schedules using the Obse
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
 - [Usage](#usage)
-- [UML Diagram](#uml-diagram)
-- [Contributing](#contributing)
-- [License](#license)
+- [UML Diagram](#data-flow)
+- [Output](#output)
 
 ## Features
 
